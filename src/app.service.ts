@@ -2,6 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { data, ReportType } from './data';
 
+interface Report {
+  source: string;
+  amount: number;
+}
+
 @Injectable()
 export class AppService {
   getAllIncomeReports(type: string) {
@@ -30,7 +35,7 @@ export class AppService {
     return report;
   }
 
-  createIncomeReport(body: any, type: string) {
+  createIncomeReport(body: Report, type: string) {
     const typeReport =
       type === ReportType.INCOME ? ReportType.INCOME : ReportType.EXPENSE;
     const newReport = {
@@ -47,7 +52,7 @@ export class AppService {
     return newReport;
   }
 
-  updateIncomeReport(id: string, type: string, body: any) {
+  updateIncomeReport(id: string, type: string, body: Partial<Report>) {
     const report = data.report
       .filter((report) => report.type === type)
       .find((report) => report.id === id);
