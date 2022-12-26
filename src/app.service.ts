@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { data, ReportType } from './data';
+import { ReportResponseDto } from './dtos/report.dto';
 
 interface Report {
   source: string;
@@ -9,7 +10,7 @@ interface Report {
 
 @Injectable()
 export class AppService {
-  getAllIncomeReports(type: string) {
+  getAllIncomeReports(type: string): ReportResponseDto[] {
     const typeReport =
       type === ReportType.INCOME ? ReportType.INCOME : ReportType.EXPENSE;
     if (type !== 'income' && type !== 'expense') {
@@ -18,10 +19,12 @@ export class AppService {
         HttpStatus.NOT_FOUND,
       );
     }
-    return data.report.filter((report) => report.type === typeReport);
+    return data.report
+      .filter((report) => report.type === typeReport)
+      .map((report) => new ReportResponseDto(report));
   }
 
-  getIncomeReportById(id: string, type: string) {
+  getIncomeReportById(id: string, type: string): ReportResponseDto {
     const report = data.report
       .filter((report) => report.type === type)
       .find((report) => report.id === id);
@@ -32,10 +35,10 @@ export class AppService {
         HttpStatus.NOT_FOUND,
       );
 
-    return report;
+    return new ReportResponseDto(report);
   }
 
-  createIncomeReport(body: Report, type: string) {
+  createIncomeReport(body: Report, type: string): ReportResponseDto {
     const typeReport =
       type === ReportType.INCOME ? ReportType.INCOME : ReportType.EXPENSE;
     const newReport = {
@@ -49,10 +52,14 @@ export class AppService {
 
     data.report.push(newReport);
 
-    return newReport;
+    return new ReportResponseDto(newReport);
   }
 
-  updateIncomeReport(id: string, type: string, body: Partial<Report>) {
+  updateIncomeReport(
+    id: string,
+    type: string,
+    body: Partial<Report>,
+  ): ReportResponseDto {
     const report = data.report
       .filter((report) => report.type === type)
       .find((report) => report.id === id);
@@ -75,7 +82,8 @@ export class AppService {
       updated_at: new Date(),
     };
 
-    return data.report[index];
+    data.report[index];
+    return new ReportResponseDto(data.report[index]);
   }
 
   deleteIncomeReport(id: string) {

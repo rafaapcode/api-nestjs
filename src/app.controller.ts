@@ -9,7 +9,11 @@ import {
 } from '@nestjs/common';
 import { Body, Delete, HttpCode, Put } from '@nestjs/common/decorators';
 import { ReportType } from '../src/data';
-import { CreateReportDto, UpdateReportDto } from './dtos/report.dto';
+import {
+  CreateReportDto,
+  UpdateReportDto,
+  ReportResponseDto,
+} from './dtos/report.dto';
 
 @Controller('report/:type')
 export class AppController {
@@ -18,7 +22,7 @@ export class AppController {
   @Get()
   getAllIncomeReports(
     @Param('type', new ParseEnumPipe(ReportType)) type: string,
-  ) {
+  ): ReportResponseDto[] {
     return this.appservice.getAllIncomeReports(type);
   }
 
@@ -26,7 +30,7 @@ export class AppController {
   getIncomeReportById(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('type', new ParseEnumPipe(ReportType)) type: string,
-  ) {
+  ): ReportResponseDto {
     return this.appservice.getIncomeReportById(id, type);
   }
 
@@ -34,7 +38,7 @@ export class AppController {
   createIncomeReport(
     @Body() { source, amount }: CreateReportDto,
     @Param('type', new ParseEnumPipe(ReportType)) type: string,
-  ) {
+  ): ReportResponseDto {
     return this.appservice.createIncomeReport({ source, amount }, type);
   }
 
@@ -43,7 +47,7 @@ export class AppController {
     @Param('id', ParseUUIDPipe) id: string,
     @Param('type', new ParseEnumPipe(ReportType)) type: string,
     @Body() { source, amount }: UpdateReportDto,
-  ) {
+  ): ReportResponseDto {
     return this.appservice.updateIncomeReport(id, type, { source, amount });
   }
 
