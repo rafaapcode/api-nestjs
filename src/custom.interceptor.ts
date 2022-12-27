@@ -9,7 +9,6 @@ export class CustomInterceptor implements NestInterceptor {
           ...data,
           createdAt: new Intl.DateTimeFormat('en-US').format(data.created_at),
         };
-
         Reflect.defineProperty(response, 'updated_at', null);
         Reflect.defineProperty(response, 'created_at', null);
         return response;
