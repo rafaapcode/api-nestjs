@@ -7,12 +7,12 @@ export class CustomInterceptor implements NestInterceptor {
       map((data) => {
         const response = {
           ...data,
-          createdAt: data.created_at,
+          createdAt: new Intl.DateTimeFormat('en-US').format(data.created_at),
         };
 
         Reflect.defineProperty(response, 'updated_at', null);
         Reflect.defineProperty(response, 'created_at', null);
-        return data;
+        return response;
       }),
     );
   }

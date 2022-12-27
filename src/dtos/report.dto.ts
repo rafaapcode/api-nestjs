@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
-import { Exclude, Expose } from 'class-transformer';
 import {
   IsOptional,
   IsPositive,
@@ -34,15 +33,7 @@ export class ReportResponseDto {
   id: string;
   source: string;
   amount: number;
-  @Expose({ name: 'createdAt' })
-  transformedCreatedAt() {
-    return new Intl.DateTimeFormat('en-US').format(this.created_at);
-  }
-
-  @Exclude()
   created_at: Date;
-
-  @Exclude()
   updated_at: Date;
   type: ReportType;
 
