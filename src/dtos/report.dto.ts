@@ -1,8 +1,11 @@
-import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
 import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Length,
   IsOptional,
   IsPositive,
-} from 'class-validator/types/decorator/decorators';
+} from 'class-validator';
 import { ReportType } from 'src/data';
 
 export class CreateReportDto {
